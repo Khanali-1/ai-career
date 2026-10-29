@@ -1,16 +1,29 @@
-# React + Vite
+# AI Career Pilot
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+AI Career Pilot is a full-stack web application built with React.js, Tailwind CSS, Node.js, Express.js, and MongoDB.
 
-Currently, two official plugins are available:
+It helps users find jobs, save opportunities, analyze resumes using AI, generate career roadmaps, and prepare for interviews.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- User registration and login
+- Browse and save jobs
+- AI-powered resume analysis
+- AI-generated career roadmaps
+- Interview preparation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- **Frontend:** React.js, Tailwind CSS, Vite
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB
+- **Authentication:** JWT
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Local Setup
+
+1. Install frontend dependencies using `npm install` in the project root.
+2. Install backend dependencies using `npm install` inside the `backend` folder.
+3. Add your environment variables to `backend/.env`.
+4. Start the frontend and backend using the scripts defined in their respective `package.json` files.
+
+**Security:** Never upload `.env` files or API secrets to GitHub.
