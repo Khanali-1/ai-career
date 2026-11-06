@@ -9,13 +9,17 @@
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "build"
+        "distDir": "dist"
       }
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
+      "dest": "backend/app.js"
+    },
+    {
+      "src": "/uploads/(.*)",
       "dest": "backend/app.js"
     },
     {
