@@ -135,7 +135,7 @@ export default function ResumeAnalyzer() {
               </h2>
 
               <p className="mt-2 text-sm text-gray-500">
-                Please wait while Gemini reviews your PDF.
+                Please wait while AI reviews your PDF.
               </p>
             </div>
           ) : analysis ? (

@@ -38,35 +38,54 @@ Rules:
 - Use simple, helpful English.
 `;
 
-  const response = await ai.models.generateContent({
-    model: "gemini-3.8-flash",
-    contents: prompt,
-    config: {
-      responseMimeType: "application/json",
-    },
-  });
+  const models = [
+    "gemini-3.5-flash-lite",
+    "gemini-3.6-flash",
+    "gemini-3.8-flash",
+  ];
 
-  const text = response.text;
+  let lastError = null;
 
-  if (!text) {
-    throw new Error("AI returned an empty response");
+  for (const model of models) {
+    try {
+      console.log(`Answer review → model: ${model}`);
+
+      const response = await ai.models.generateContent({
+        model,
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+        },
+      });
+
+      const text = response?.text;
+      if (!text) continue;
+
+      const feedback = JSON.parse(text);
+
+      if (
+        typeof feedback.score !== "number" ||
+        !Array.isArray(feedback.strengths) ||
+        !Array.isArray(feedback.improvements) ||
+        typeof feedback.improvedAnswer !== "string" ||
+        typeof feedback.summary !== "string"
+      ) {
+        continue;
+      }
+
+      feedback.score = Math.max(0, Math.min(100, Math.round(feedback.score)));
+      console.log(`✅ Answer review success with ${model}`);
+      return feedback;
+
+    } catch (error) {
+      lastError = error;
+      console.log(`❌ ${model} failed for answer review:`, error.message);
+    }
   }
 
-  const feedback = JSON.parse(text);
-
-  if (
-    typeof feedback.score !== "number" ||
-    !Array.isArray(feedback.strengths) ||
-    !Array.isArray(feedback.improvements) ||
-    typeof feedback.improvedAnswer !== "string" ||
-    typeof feedback.summary !== "string"
-  ) {
-    throw new Error("AI returned an invalid feedback format");
-  }
-
-  feedback.score = Math.max(0, Math.min(100, Math.round(feedback.score)));
-
-  return feedback;
+  throw new Error(
+    "Answer review service is temporarily unavailable. Please try again."
+  );
 };
 
-module.exports =  reviewAnswerWithAI ;
+module.exports = reviewAnswerWithAI;

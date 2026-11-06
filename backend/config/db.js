@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const connectDB = async ()=>{
     try{
-        await mongoose.connect ('mongodb://localhost:27017/ai_career');
+        await mongoose.connect (process.env.MONGO_URI);
         console.log(" mongodb connected successfully")
     }
     catch(error){

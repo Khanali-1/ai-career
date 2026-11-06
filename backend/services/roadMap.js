@@ -40,30 +40,51 @@ Use this JSON format:
 }
 `;
 
-  const response = await ai.models.generateContent({
-    model: "gemini-3.8-flash",
-    contents: prompt,
-  });
+  const models = [
+    "gemini-3.5-flash-lite",
+    "gemini-3.6-flash",
+    "gemini-3.8-flash",
+  ];
 
-  const text = response.text;
+  let lastError = null;
 
-  if (!text) {
-    throw new Error("AI returned an empty response");
+  for (const model of models) {
+    try {
+      console.log(`Roadmap → model: ${model}`);
+
+      const response = await ai.models.generateContent({
+        model,
+        contents: prompt,
+      });
+
+      let text = response?.text;
+      if (!text) continue;
+
+      // Markdown code block clean karna
+      text = text
+        .replace(/^```json\s*/i, "")
+        .replace(/^```\s*/i, "")
+        .replace(/\s*```$/, "")
+        .trim();
+
+      const roadmap = JSON.parse(text);
+
+      if (!Array.isArray(roadmap.steps) || roadmap.steps.length === 0) {
+        continue;
+      }
+
+      console.log(`✅ Roadmap success with ${model}`);
+      return roadmap;
+
+    } catch (error) {
+      lastError = error;
+      console.log(`❌ ${model} failed for roadmap:`, error.message);
+    }
   }
 
-  const cleanedText = text
-    .replace(/^```json\s*/i, "")
-    .replace(/^```\s*/i, "")
-    .replace(/\s*```$/, "")
-    .trim();
-
-  const roadmap = JSON.parse(cleanedText);
-
-  if (!Array.isArray(roadmap.steps) || roadmap.steps.length === 0) {
-    throw new Error("AI returned an invalid roadmap");
-  }
-
-  return roadmap;
+  throw new Error(
+    "Roadmap service is temporarily unavailable. Please try again."
+  );
 };
 
 module.exports = generateRoadmapWithAI;
