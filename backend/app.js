@@ -1,3 +1,4 @@
+
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -12,8 +13,17 @@ const savedJobRoutes = require("./routes/savedJobRoutes.js");
 
 const app = express();
 
+// Middleware
+app.use(cors({
+  origin: [
+    "https://ai-career-wheat.vercel.app",
+    "http://localhost:5173"
+  ],
+  credentials: true
+}));
+
 app.use(express.json());
-app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/auth", authRoutes);
@@ -24,13 +34,12 @@ app.use("/api/roadmap", roadRoutes);
 app.use("/api/interview", interviewRoutes);
 app.use("/api/saved-jobs", savedJobRoutes);
 
-// Uploads folder
+// Uploads
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Test route
 app.get("/", (req, res) => {
-  res.send("AI Career is running here");
+  res.status(200).send("AI Career Backend is running successfully!");
 });
 
-// Vercel ke liye zaroori
 module.exports = app;
